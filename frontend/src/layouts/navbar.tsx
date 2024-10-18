@@ -192,9 +192,14 @@ export const NavBar = () => {
         borderBottom={"1px"}
         borderColor={"gray.300"}
         py={"12px"}
+        position="sticky"
+        top="0"
+        zIndex="10"
+        bg="gray.700"
       >
-        <Image srcSet="/logo.png" alt="logo" w={"full"} maxW={"120px"} />
+        <Image srcSet="/zalo.png" alt="logo" w={"full"} maxW={"120px"} />
       </HStack>
+
       <VStack>
         {menus.map((item, index) => (
           <Stack key={index} w={"full"}>

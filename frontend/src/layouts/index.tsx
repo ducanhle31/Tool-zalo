@@ -57,7 +57,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <DrawerCloseButton />
             <Box
               w={"full"}
-              h={"100vh"}
+              h={"150vh"}
               bg={"gray.700"}
               display={{ lg: "none" }}
             >
@@ -69,7 +69,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <HStack alignItems={"start"} spacing={"32px"}>
         <Box
           w={"220px"}
-          h={"100vh"}
+          h={"150vh"}
           bg={"gray.700"}
           display={{ base: "none", lg: "block" }}
         >
