@@ -2,11 +2,27 @@ export type User = {
   _id: string;
   name: string;
   user_name: string;
+  password: string;
   facility: Facility;
   token: string | null;
+  status: string;
+  role: "admin" | null;
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UserPreview = {
+  _id: string;
+  name: string;
+  user_name: string;
+  password: string;
+  facility: string | null;
+  token: string | null;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 
 export type FacilityPreview = {
   _id: string;

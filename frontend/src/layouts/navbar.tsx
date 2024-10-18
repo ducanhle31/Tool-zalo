@@ -24,7 +24,9 @@ import { IoIosLogOut } from "react-icons/io";
 import { IoWalletOutline } from "react-icons/io5";
 import { LuLeaf, LuPackageCheck } from "react-icons/lu";
 import { MdOutlinePlace } from "react-icons/md";
+import { FaRegCircleUser } from "react-icons/fa6";
 import {
+  TbAffiliate,
   TbMessage2Dollar,
   TbMessage2Heart,
   TbTransactionPound,
@@ -142,9 +144,14 @@ const menus = [
     href: "/private/settings",
     child: [
       {
-        name: "Cơ sở",
-        icon: <MdOutlinePlace fontSize={"20px"} />,
+        name: "Nguồn giới thiệu",
+        icon: <TbAffiliate fontSize={"20px"} />,
         href: "/private/settings/facilities",
+      },
+      {
+        name: "Người dùng",
+        icon: <FaRegCircleUser fontSize={"20px"} />,
+        href: "/private/settings/users",
       },
       {
         name: "Loại giao dịch",
