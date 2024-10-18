@@ -1,7 +1,7 @@
 import multer from "multer";
 
 import { Router } from "express";
-import customersController from "../controllers/customers.Controller";
+import customersController from "../controllers/customers.controller";
 import { validateAccessToken } from "../middleware/auth.Middleware";
 
 const upload = multer({ dest: "uploads/" });

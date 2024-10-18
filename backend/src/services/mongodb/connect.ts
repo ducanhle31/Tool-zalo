@@ -5,7 +5,7 @@ const uri = process.env.MONGODB_URI!;
 export const connectDb = async () => {
   mongoose
     .connect(uri, {
-      dbName: "myspa",
+      dbName: "aum_tool_zns",
     })
     .then(
       () => {

@@ -1,25 +1,19 @@
 import { Request, Response } from "express";
 import { Campaign } from "../models/campaign.Model";
 import { Customer } from "../models/customer.Model";
-import { zaloTemplates } from "./zalo-templates.Controller";
+import { scheduledJobs, scheduleZns } from "../services/zalo/zaloZns";
+import zaloTemplatesController from "./zalo-templates.Controller";
 
-const sendZns = ({
-  templateType,
-  customers,
-  startAt,
-  cb,
-}: {
-  templateType: "discout" | "welcome";
-  customers: any;
-  startAt: Date | string;
-  cb: (param: { fails: {} }) => void;
-}) => {
-  console.log(customers, startAt, templateType);
-  cb({ fails: {} });
-};
+const cencelSendZns = (campaignId: string) => {
+  const job = scheduledJobs.get(campaignId);
 
-const cencelSendZns = (id: string) => {
-  console.log(id);
+  if (job) {
+    job.stop();
+    scheduledJobs.delete(campaignId);
+    console.log(`Canceled scheduled ZNS for campaign ID: ${campaignId}`);
+  } else {
+    console.log(`No scheduled ZNS found for campaign ID: ${campaignId}`);
+  }
 };
 
 class CampaignsController {
@@ -37,10 +31,10 @@ class CampaignsController {
     const id = req.params.id;
     try {
       const campaign = await Campaign.findById(id).populate("customer_groups");
-      const zaloTemplate = zaloTemplates?.find(
-        (item) => item._id === campaign?.template
+      const templatesResponse = await zaloTemplatesController.fetchTemplates();
+      const zaloTemplate = templatesResponse.find(
+        (item: any) => item.template === Number(campaign?.template)
       );
-
       return res.json({
         campaign: { ...campaign?.toObject(), template: zaloTemplate },
         ok: true,
@@ -50,16 +44,13 @@ class CampaignsController {
       res.status(500).send(error);
     }
   }
-
   public async create(req: Request, res: Response) {
     const campaign = req.body;
-
     const name = campaign?.name;
     const description = campaign?.description;
     const status = campaign?.status || "active";
     const template = campaign?.template;
     const startAt = campaign?.startAt;
-
     if (!name || !description) {
       return res.json({
         error: "Thiếu thông tin tạo chiến dịch",
@@ -81,20 +72,13 @@ class CampaignsController {
         description,
         status,
       });
-
       const customers = await Customer.find({
         customer_groups: { $in: campaign?.customer_groups },
       });
 
-      status === "active" &&
-        template === "" &&
-        sendZns({
-          templateType: "discout",
-          customers,
-          startAt,
-          cb: (fails: {}) => {},
-        });
-
+      if (status === "active" && template) {
+        scheduleZns({ template, customers, startAt, _id: result[0]._id });
+      }
       return res.json({ result, ok: true });
     } catch (error) {
       console.error(error);
@@ -108,6 +92,8 @@ class CampaignsController {
     const status = campaign?.status;
     const template = campaign?.template;
     const startAt = campaign?.startAt;
+    const templateType = campaign?.templateType;
+
     delete campaign?._id;
 
     if (!_id)
@@ -127,10 +113,12 @@ class CampaignsController {
         customer_groups: { $in: campaign?.customer_groups },
       });
 
-      status === "active" &&
-        template === "" &&
-        sendZns({ templateType: "discout", customers, startAt, cb: () => {} });
-
+      // status === "active" &&
+      //   template === "" &&
+      //   sendZns({ template, customers, startAt, cb: () => {} });
+      if (status === "active" && template) {
+        scheduleZns({ template, customers, startAt, _id });
+      }
       return res.status(200).json({ campaign: result, ok: true });
     } catch (error) {
       console.log(error);

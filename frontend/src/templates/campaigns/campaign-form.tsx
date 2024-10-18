@@ -2,7 +2,7 @@
 "use client";
 
 import { useCustomerGroups } from "@/hooks/useCustomerGroups";
-import { useZaloTemplates } from "@/hooks/useZaloTemplates";
+import { useZaloTemplate, useZaloTemplates } from "@/hooks/useZaloTemplates";
 import { Campaign, CampaignPreview } from "@/types/global";
 import {
   createCampaign,
@@ -29,6 +29,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   Stack,
   Textarea,
   useDisclosure,
@@ -36,7 +37,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FaCalendarAlt, FaUserAlt } from "react-icons/fa";
 import { MdOutlineDescription } from "react-icons/md";
@@ -56,9 +57,10 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const toast = useToast();
-
   const { customerGroups } = useCustomerGroups();
   const { zaloTemplates } = useZaloTemplates();
+  const [id, setSelectedTemplateId] = useState<string>("");
+  const { zaloTemplate } = useZaloTemplate(id);
 
   const {
     register,
@@ -72,6 +74,7 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
     mutationFn: createCampaign,
     onSuccess: async (data) => {
       const res = await data.json();
+      console.log(res);
       if (res?.ok) {
         toast({
           title: "Thành công",
@@ -160,6 +163,11 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
     },
   });
 
+  const handleTemplateChange = (selectedOption: any) => {
+    const templateId = selectedOption?.value || "";
+    setSelectedTemplateId(templateId);
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data, event) => {
     const submitter = (event?.nativeEvent as SubmitEvent)
       .submitter as HTMLButtonElement;
@@ -203,8 +211,8 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
 
     if (campaign?.template) {
       setValue("template", {
-        label: campaign?.template?.name,
-        value: campaign?.template?._id,
+        label: campaign?.template?.templateName,
+        value: campaign?.template?.templateId,
       });
     }
 
@@ -259,8 +267,8 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
 
         <Stack>
           <Heading size={"sm"}>Chọn loại tin mẫu</Heading>
-          <HStack spacing={4} backgroundColor="whiteAlpha.900">
-            <Box flex={1}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={"4"}>
+            <Box>
               <Controller
                 control={control}
                 {...register("template", { required: true })}
@@ -274,10 +282,14 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
                   >
                     <Select
                       options={zaloTemplates?.map((item) => ({
-                        label: item?.name,
-                        value: item?._id,
+                        label: item?.templateName,
+                        value: item?.templateId,
                       }))}
-                      onChange={onChange}
+                      // onChange={onChange}
+                      onChange={(selectedOption) => {
+                        onChange(selectedOption);
+                        handleTemplateChange(selectedOption);
+                      }}
                       onBlur={onBlur}
                       value={value}
                       name={name}
@@ -293,9 +305,20 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
                 )}
               />
             </Box>
-
-            <Box flex={1}>Xem trước mẫu tin tin</Box>
-          </HStack>
+            <Box bgColor={"white"}>
+              {zaloTemplate ? (
+                <iframe
+                  src={zaloTemplate.previewUrl}
+                  title="Preview"
+                  width="100%"
+                  height="350px"
+                  style={{ backgroundColor: "white" }}
+                />
+              ) : (
+                <Heading size="sm">Chọn mẫu tin</Heading>
+              )}
+            </Box>
+          </SimpleGrid>
         </Stack>
 
         <Stack>

@@ -7,7 +7,6 @@ import path from "path";
 import { commonRouter } from "./routes";
 import { connectDb } from "./services/mongodb/connect";
 import { scheduleTokenRefresh } from "./services/zalo/zaloJobTokenService";
-import { scheduleZNS } from "./services/zalo/zns.Service";
 
 connectDb();
 
@@ -45,9 +44,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
 app.use("/api/v1", commonRouter);
 
 // chạy hàm này để làm mới token tự động
-// scheduleTokenRefresh();
-// hàm gửi tin
-// scheduleZNS();
+scheduleTokenRefresh();
 
 const port = 3006;
 

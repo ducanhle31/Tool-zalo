@@ -1,16 +1,38 @@
 import axios from "axios";
+import crypto from "crypto";
 import fs from "fs";
 import { DateTime } from "luxon";
 import path from "path";
-import { readCodeVerifierFromFile } from "../../untils/pkceUtils";
 
-const appId = process.env.APP_ID!;
-const secretKey = process.env.SECRET_KEY!;
+const appId = process.env.APP_ID || "4383217975172036996";
+const secretKey = process.env.SECRET_KEY || "eSQTIpVIeDd2Zs8R6AFe";
+const redirectUri =
+  process.env.ZALO_REDIRECT_URI ||
+  "http://localhost:3000/api/v1/authzalo/callback";
 
 const tokenFilePath = path.join(__dirname, "./token.json");
 
+let codeVerifier = "";
+
+export const generateCodeVerifier = () => {
+  codeVerifier = crypto.randomBytes(32).toString("base64url").slice(0, 43);
+  console.log(codeVerifier);
+  return codeVerifier;
+};
+
+export const generateCodeChallenge = (codeVerifier: string) => {
+  return crypto.createHash("sha256").update(codeVerifier).digest("base64url");
+};
+
+export const getAuthorizationUrl = () => {
+  const state = crypto.randomBytes(16).toString("hex");
+  const codeChallenge = generateCodeChallenge(generateCodeVerifier());
+  return `https://oauth.zaloapp.com/v4/oa/permission?app_id=${appId}&redirect_uri=${encodeURIComponent(
+    redirectUri
+  )}&code_challenge=${encodeURIComponent(codeChallenge)}&state=${state}`;
+};
+
 export const exchangeCodeForAccessToken = async (code: string) => {
-  const codeVerifier = readCodeVerifierFromFile();
   try {
     const response = await axios.post(
       "https://oauth.zaloapp.com/v4/oa/access_token",
@@ -37,7 +59,7 @@ export const exchangeCodeForAccessToken = async (code: string) => {
       expires_in: response.data.expires_in,
       created_at: createdAt,
     };
-    console.log(tokenData);
+
     fs.writeFileSync(tokenFilePath, JSON.stringify(tokenData, null, 2), "utf8");
 
     return tokenData;
@@ -46,12 +68,9 @@ export const exchangeCodeForAccessToken = async (code: string) => {
   }
 };
 
-// Hàm ghi token mới vào file JSON
 const writeTokenToFile = (tokenData: any) => {
   fs.writeFileSync(tokenFilePath, JSON.stringify(tokenData, null, 2), "utf8");
 };
-
-// Hàm làm mới Access Token bằng Refresh Token
 
 export const refreshAccessToken = async (refreshToken: string) => {
   try {

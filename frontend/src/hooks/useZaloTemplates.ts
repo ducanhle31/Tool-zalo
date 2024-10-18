@@ -1,11 +1,11 @@
 "use client";
 
-import { ZaloTemplate } from "@/types/global";
+import { ZaloTemplate, ZaloTemplates } from "@/types/global";
 import { instance } from "@/untils/instance";
 import { useEffect, useState } from "react";
 
 export const useZaloTemplates = () => {
-  const [zaloTemplates, setZaloTemplates] = useState<ZaloTemplate[]>([]);
+  const [zaloTemplates, setZaloTemplates] = useState<ZaloTemplates[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export const useZaloTemplate = (id: string) => {
       try {
         const response = await instance.get(`zalo-templates/${id}`);
         const data = await response.data;
-        const zaloTemplate = data?.zaloTemplate;
+        const zaloTemplate = data?.template;
         zaloTemplate && setZaloTemplate(zaloTemplate);
         setIsLoading(false);
       } catch (error) {

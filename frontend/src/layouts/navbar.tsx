@@ -60,35 +60,40 @@ const menus = [
       },
     ],
   },
-  // {
-  //   name: "Chiến dịch",
-  //   icon: <LuLeaf fontSize={"24px"} />,
-  //   href: "/private/campaigns",
-  //   child: [
-  //     {
-  //       name: "Tạo chiến dịch",
-  //       icon: <FaPlus fontSize={"20px"} />,
-  //       href: "/private/campaigns/create-campaigns",
-  //     },
-  //   ],
-  // },
-  // {
-  //   name: "Dịch vụ & gói",
-  //   icon: <LuPackageCheck fontSize={"24px"} />,
-  //   href: "/private/products",
-  //   child: [
-  //     {
-  //       name: "Tạo sản phẩm",
-  //       icon: <FaPlus fontSize={"20px"} />,
-  //       href: "/private/products/create-product",
-  //     },
-  //     {
-  //       name: "Nhập sản phẩm",
-  //       icon: <CiExport fontSize={"20px"} />,
-  //       href: "/private/products/import-products",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Chiến dịch",
+    icon: <LuLeaf fontSize={"24px"} />,
+    href: "/private/campaigns",
+    child: [
+      {
+        name: "Tạo chiến dịch",
+        icon: <FaPlus fontSize={"20px"} />,
+        href: "/private/campaigns/create-campaigns",
+      },
+      {
+        name: "Danh sách tin gửi",
+        icon: <FaPlus fontSize={"20px"} />,
+        href: "/private/campaigns/send-campaigns",
+      },
+    ],
+  },
+  {
+    name: "Dịch vụ & gói",
+    icon: <LuPackageCheck fontSize={"24px"} />,
+    href: "/private/products",
+    child: [
+      {
+        name: "Tạo sản phẩm",
+        icon: <FaPlus fontSize={"20px"} />,
+        href: "/private/products/create-product",
+      },
+      {
+        name: "Nhập sản phẩm",
+        icon: <CiExport fontSize={"20px"} />,
+        href: "/private/products/import-products",
+      },
+    ],
+  },
 
   {
     name: "Thẻ thành viên",
@@ -114,23 +119,23 @@ const menus = [
       },
     ],
   },
-  // {
-  //   name: "Zalo OA",
-  //   icon: <BsHeart fontSize={"24px"} />,
-  //   href: "/private/manage-zalo-oa",
-  //   child: [
-  //     {
-  //       name: "Mẫu tin zns",
-  //       icon: <TbMessage2Dollar fontSize={"20px"} />,
-  //       href: "",
-  //     },
-  //     {
-  //       name: "Mẫu tin UID",
-  //       icon: <TbMessage2Heart fontSize={"20px"} />,
-  //       href: "",
-  //     },
-  //   ],
-  // },
+  {
+    name: "Zalo OA",
+    icon: <BsHeart fontSize={"24px"} />,
+    href: "/private/manage-zalo-oa",
+    child: [
+      {
+        name: "Mẫu tin zns",
+        icon: <TbMessage2Dollar fontSize={"20px"} />,
+        href: "/private/manage-zalo-oa/zns-template",
+      },
+      {
+        name: "Mẫu tin UID",
+        icon: <TbMessage2Heart fontSize={"20px"} />,
+        href: "/private/manage-zalo-oa/uid-template",
+      },
+    ],
+  },
   {
     name: "Cài đặt",
     icon: <CiSettings fontSize={"24px"} />,
@@ -170,6 +175,7 @@ export const NavBar = () => {
     wallet: false,
     transaction: false,
     setting: false,
+    manageZaloOa: false,
   });
 
   useEffect(() => {
@@ -232,6 +238,9 @@ export const NavBar = () => {
                   if (item.href.includes("/settings")) {
                     return { ...prev, setting: !prev?.setting };
                   }
+                  if (item.href.includes("/manage-zalo-oa")) {
+                    return { ...prev, manageZaloOa: !prev?.manageZaloOa };
+                  }
                   return prev;
                 })
               }
@@ -257,7 +266,10 @@ export const NavBar = () => {
                       collapses?.wallet) ||
                     (childItem.href.includes("/transactions") &&
                       collapses?.transaction) ||
-                    (childItem.href.includes("/settings") && collapses?.setting)
+                    (childItem.href.includes("/settings") &&
+                      collapses?.setting) ||
+                    (childItem.href.includes("/manage-zalo-oa") &&
+                      collapses?.manageZaloOa)
                   }
                   key={index}
                 >

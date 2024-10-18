@@ -206,6 +206,14 @@ export type CampaignPreview = {
   template: string;
 };
 
+export type CustomerResults = {
+  _id: string;
+  template: ZaloTemplate;
+  name: string;
+  phone: string;
+  status: string;
+  createdAt: Date;
+};
 export type Campaign = {
   _id: string;
   name: string;
@@ -216,12 +224,22 @@ export type Campaign = {
   createdAt: Date;
   updateAt?: Date;
   template: ZaloTemplate;
+  customer_results?: CustomerResults[];
 };
 
+export type ZaloTemplates = {
+  templateId: string;
+  templateName: string;
+  createdTime: string;
+  status: string;
+  templateQuality: string;
+};
 export type ZaloTemplate = {
-  _id: string;
-  name: string;
-  description: string;
+  templateId: string;
+  templateName: string;
+  status: string;
+  templateQuality: string;
+  previewUrl: string;
 };
 
 export type TransactionForm = {
@@ -232,4 +250,20 @@ export type TransactionForm = {
   metadata: any;
   createdAt: Date;
   updateAt?: Date;
+};
+
+export type OaInfo = {
+  oa_id: string;
+  name: string;
+  description: string;
+  is_verified: boolean;
+  oa_type: number;
+  cate_name: string;
+  num_follower: number;
+  avatar: string;
+  cover: string;
+  package_name: string;
+  package_valid_through_date: string;
+  package_auto_renew_date: string;
+  linked_zca: string;
 };

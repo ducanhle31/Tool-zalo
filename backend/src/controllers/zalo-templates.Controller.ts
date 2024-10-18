@@ -1,45 +1,65 @@
+import axios from "axios";
 import { Request, Response } from "express";
+import { readTokenFromFile } from "../services/zalo/zaloJobTokenService";
 
-export const zaloTemplates = [
-  {
-    _id: "1",
-    name: "Khuyến mãi giảm giá",
-    description: "Khuyến mãi giảm giá",
-  },
+class ZaloTemplatesController {
+  constructor() {
+    this.get = this.get.bind(this);
+    this.getDetail = this.getDetail.bind(this);
+  }
 
-  {
-    _id: "2",
-    name: "Thông báo mới",
-    description: "Thông báo mới",
-  },
+  public async fetchTemplates(): Promise<any> {
+    const tokenData = readTokenFromFile();
+    try {
+      const response = await axios.get(
+        "https://business.openapi.zalo.me/template/all?offset=0&limit=100&status=1",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            access_token: tokenData.access_token,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.error("Error fetching Zalo templates:", error);
+      throw new Error("Failed to fetch Zalo templates");
+    }
+  }
 
-  {
-    _id: "3",
-    name: "Thông báo đơn hàng",
-    description: "Thông báo đơn hàng",
-  },
-];
-
-class zaloTemplatesController {
   public async get(req: Request, res: Response) {
     try {
+      const zaloTemplates = await this.fetchTemplates();
       return res.json({ zaloTemplates, ok: true });
     } catch (error) {
       console.error(error);
-      res.status(500).send(error);
+      res.status(500).send({ error: error, ok: false });
     }
   }
 
   public async getDetail(req: Request, res: Response) {
-    const id = req.params.id;
+    const templateId = req.params.id;
+    const tokenData = readTokenFromFile();
     try {
-      const zaloTemplate = zaloTemplates?.find((item) => item._id === id);
-      return res.json({ zaloTemplate, ok: true });
+      const response = await axios.get(
+        "https://business.openapi.zalo.me/template/info",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            access_token: tokenData.access_token,
+          },
+          params: {
+            template_id: templateId,
+          },
+        }
+      );
+
+      return res.json({ template: response.data.data, ok: true });
     } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
+      console.error("Error fetching Zalo template details:", error);
+      res.status(500).send({ error: error, ok: false });
     }
   }
 }
 
-export default new zaloTemplatesController();
+export default new ZaloTemplatesController();

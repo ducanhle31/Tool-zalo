@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
-import { getAuthorizationUrl } from "../services/zalo/zaloAuthService";
-import { exchangeCodeForAccessToken } from "../services/zalo/zaloTokenService";
+import { getOfficialAccountInfo } from "../services/zalo/zaloInfoService";
+import {
+  exchangeCodeForAccessToken,
+  getAuthorizationUrl,
+} from "../services/zalo/zaloTokenService";
 
 class AuthZaloController {
   public authZalo = (req: Request, res: Response) => {
@@ -26,6 +29,15 @@ class AuthZaloController {
         </body>
       </html>
     `);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  public infoZalo = async (req: Request, res: Response) => {
+    try {
+      const oaInfo = await getOfficialAccountInfo();
+      res.status(200).json(oaInfo);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }

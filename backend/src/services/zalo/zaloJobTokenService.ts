@@ -5,8 +5,8 @@ import path from "path";
 import { refreshAccessToken } from "./zaloTokenService";
 
 const tokenFilePath = path.join(__dirname, "./token.json");
-// Hàm đọc token từ file JSON
-const readTokenFromFile = () => {
+
+export const readTokenFromFile = () => {
   if (fs.existsSync(tokenFilePath)) {
     const tokenData = fs.readFileSync(tokenFilePath, "utf8");
     return JSON.parse(tokenData);
@@ -14,14 +14,13 @@ const readTokenFromFile = () => {
   return null;
 };
 
-// Hàm lấy thời gian hiện tại ở múi giờ Việt Nam
 const getVietnamTimeAsDate = (timeInMs: number) => {
   return DateTime.fromMillis(timeInMs).setZone("Asia/Ho_Chi_Minh").toJSDate();
 };
 
 export const scheduleTokenRefresh = async () => {
   const tokenData = readTokenFromFile();
-  if (!tokenData) {
+  if (!tokenData.access_token) {
     console.log("Token not found. Please obtain a token first.");
     return;
   }
@@ -31,7 +30,6 @@ export const scheduleTokenRefresh = async () => {
     zone: "Asia/Ho_Chi_Minh",
   }).toMillis();
 
-  // Check if the token is expired
   const isExpired = Date.now() >= createdAtTime + expires_in * 1000;
 
   if (isExpired) {
@@ -40,14 +38,12 @@ export const scheduleTokenRefresh = async () => {
   } else {
     console.log("Token vẫn hợp lệ.");
 
-    // Calculate refresh time (1 hour before expiry) in Vietnam time
     const refreshTime = createdAtTime + expires_in * 1000 - 3600000;
     const vietnamRefreshTime = getVietnamTimeAsDate(refreshTime);
 
     const now = DateTime.now().setZone("Asia/Ho_Chi_Minh").toMillis();
     const delay = refreshTime - now;
 
-    // If the refresh time is in the future, schedule the cron job
     if (delay > 0) {
       const cronExpression = `${vietnamRefreshTime.getMinutes()} ${vietnamRefreshTime.getHours()} ${vietnamRefreshTime.getDate()} ${
         vietnamRefreshTime.getMonth() + 1
