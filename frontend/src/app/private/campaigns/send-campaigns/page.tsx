@@ -42,6 +42,8 @@ export default function Page() {
     (campaign) =>
       campaign.customer_results?.map((result) => ({
         campaignName: campaign.name,
+        campaignID: campaign._id,
+        campaignStatus: campaign.status,
         result,
       })) || []
   );
@@ -112,12 +114,30 @@ export default function Page() {
       <Table variant="simple" mb={8} bgColor={"#f1f4f9"}>
         <Thead bgColor={"#e1e3ea"}>
           <Tr fontWeight={"bold"} fontSize={"2xl"}>
-            <Th>Tên chiến dịch</Th>
-            <Th>Id mẫu tin</Th>
-            <Th>Người nhận</Th>
-            <Th>Số điện thoại</Th>
-            <Th>Gửi lúc</Th>
-            <Th>Trạng thái</Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              Tên chiến dịch
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              ID chiến dịch
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+             Loại chiến dịch
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              ID mẫu tin
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              Người nhận
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              Số điện thoại
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              Gửi lúc
+            </Th>
+            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
+              Trạng thái
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -125,6 +145,8 @@ export default function Page() {
             rowsPag.map((row, index) => (
               <Tr key={index} fontSize="sm" _hover={{ bgColor: "white" }}>
                 <Td>{row.campaignName}</Td>
+                <Td>{row.campaignID}</Td>
+                <Td>{row.campaignStatus}</Td>
                 <Td>{row.result.template?.toString()}</Td>
                 <Td>{row.result.name}</Td>
                 <Td>{row.result.phone}</Td>

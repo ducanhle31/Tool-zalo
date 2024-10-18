@@ -185,16 +185,19 @@ export const NavBar = () => {
   }, [pathName]);
 
   return (
-    <Box bg={"gray.700"} color={"gray.200"}>
+    <Box
+      bg={"gray.700"}
+      color={"gray.200"}
+      position="sticky"
+      top="0"
+      zIndex="10"
+    >
       <HStack
         justifyContent={"center"}
         w={"full"}
         borderBottom={"1px"}
         borderColor={"gray.300"}
         py={"12px"}
-        position="sticky"
-        top="0"
-        zIndex="10"
         bg="gray.700"
       >
         <Image srcSet="/zalo.png" alt="logo" w={"full"} maxW={"120px"} />

@@ -83,7 +83,7 @@ export default function Login() {
           justifyContent="center"
           alignItems="center"
         >
-          <Image srcSet="/logo.png" maxW={"150px"} alt="logo" />
+          <Image srcSet="/zalo.png" maxW={"150px"} alt="logo" />
           <Heading color="gray.700">Đăng nhập</Heading>
           <Box minW={{ base: "90%", md: "468px" }}>
             <form onSubmit={handleSubmit(onSubmit)}>
