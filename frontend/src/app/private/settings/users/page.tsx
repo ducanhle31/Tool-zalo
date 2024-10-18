@@ -46,7 +46,7 @@ export default function Page() {
 
   const usersPag = usersFilters.slice(currentPage - 1, currentPage + 49);
 
-  if (user?.role !== "admin")
+  if ((user as any)?.role !== "admin")
     return (
       <Center h={"300px"}>
         <VStack>

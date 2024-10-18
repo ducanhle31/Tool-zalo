@@ -23,7 +23,6 @@ export type UserPreview = {
   updatedAt: Date;
 };
 
-
 export type FacilityPreview = {
   _id: string;
   name: string;
@@ -100,11 +99,26 @@ export type Customer = {
   updatedAt: Date;
 };
 
+export type CustomerGroupPreview = {
+  _id: string;
+  name: string;
+  slug: string;
+  count: number;
+  user: string | null;
+  facility: string | null;
+  status: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type CustomerGroup = {
   _id: string;
   name: string;
   slug: string;
   count: number;
+  user: UserPreview | null;
+  facility: FacilityPreview | null;
   status: string;
   description: string;
   createdAt: Date;
@@ -117,6 +131,8 @@ export type WalletPreview = {
   metadata: any;
   customer: string;
   current_balance: number;
+  user: string | null;
+  facility: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -126,6 +142,8 @@ export type Wallet = {
   status: string;
   metadata: any;
   customer: CustomerPreview;
+  user: UserPreview | null;
+  facility: FacilityPreview | null;
   current_balance: number;
   createdAt: Date;
   updatedAt: Date;
@@ -172,8 +190,10 @@ export type Transaction = {
   wallet: Wallet;
   customer: Customer;
   facility: Facility | null;
+  user: UserPreview | null;
   transaction_form: TransactionForm;
   value: number;
+  discount: number;
   transaction_type: TransactionType;
   status: string;
   metadata: any;
@@ -189,6 +209,7 @@ export type TransactionPreview = {
   wallet: WalletPreview;
   customer: CustomerPreview;
   facility: string | null;
+  user: string | null;
   transaction_form: string;
   value: Number;
   transaction_type: string;

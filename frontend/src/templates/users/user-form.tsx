@@ -1,7 +1,6 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-
 import { InputPassword } from "@/components/InputPassword";
 import MySelect from "@/components/MySelect";
 import { useFacilities } from "@/hooks/useFacilities";

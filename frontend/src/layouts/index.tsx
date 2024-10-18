@@ -9,6 +9,7 @@ import {
   DrawerOverlay,
   HStack,
   IconButton,
+  Image,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -31,6 +32,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         right={0}
         bg={"white"}
         shadow={"xl"}
+        as={HStack}
         zIndex={3}
       >
         <IconButton
@@ -42,9 +44,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           variant={"outline"}
           size={"md"}
           rounded={"sm"}
-        >
-          Open
-        </IconButton>
+        />
+
         <Drawer
           size={"xs"}
           isOpen={isOpen}
@@ -57,7 +58,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <DrawerCloseButton />
             <Box
               w={"full"}
-              h={"150vh"}
+              h={"100vh"}
               bg={"gray.700"}
               display={{ lg: "none" }}
             >
@@ -65,19 +66,34 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             </Box>
           </DrawerContent>
         </Drawer>
+        <Image
+          srcSet="/logo.png"
+          alt="Logo"
+          maxW={"80px"}
+          pos={"absolute"}
+          right={"50%"}
+          transform={"translateX(50%)"}
+        />
       </Box>
       <HStack alignItems={"start"} spacing={"32px"}>
         <Box
           w={"220px"}
-          h={"150vh"}
+          h={"100vh"}
           bg={"gray.700"}
           display={{ base: "none", lg: "block" }}
         >
           <NavBar />
         </Box>
 
-        <Box flex={1} mt={{ base: "70px", lg: 0 }}>
-          <Container maxW={"9xl"}>{children}</Container>
+        <Box
+          flex={1}
+          mt={{ base: "70px", lg: 0 }}
+          maxH={"100vh"}
+          overflowY={"auto"}
+        >
+          <Container maxW={"9xl"} pb={12}>
+            {children}
+          </Container>
         </Box>
       </HStack>
     </>

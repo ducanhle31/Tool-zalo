@@ -25,10 +25,16 @@ class AuthController {
       });
     }
 
-    await currentUser.save();
-
     return res.json({
-      user: { ...currentUser, password: undefined },
+      user: {
+        _id: currentUser.toObject()._id,
+        user_name: currentUser.toObject().user_name,
+        name: currentUser.toObject().name,
+        token: currentUser.toObject().token,
+        facility: currentUser.toObject().facility,
+        role: currentUser.toObject().role,
+        status: currentUser.toObject().status,
+      },
       ok: true,
     });
   }

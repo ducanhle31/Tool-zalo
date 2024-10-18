@@ -2,7 +2,6 @@
 "use client";
 
 import { useSessions } from "@/hooks/useSessions";
-import userData from "@/untils/data/user.json";
 import {
   Box,
   Button,
@@ -17,7 +16,6 @@ import {
   InputRightElement,
   Stack,
   chakra,
-  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -39,7 +37,6 @@ export default function Login() {
     formState: { errors },
   } = useForm<Inputs>();
   const { login } = useSessions();
-  const toast = useToast();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -49,22 +46,6 @@ export default function Login() {
     const password = data.password;
 
     login({ user_name, password });
-
-    if (user_name === userData.user_name && password === userData.user_pass) {
-      toast({
-        title: "Đăng nhập thành công",
-        status: "success",
-        position: "top-right",
-      });
-      window.location.href = "/private";
-    } else {
-      toast({
-        title: "Đăng nhập thất bại",
-        description: "Thông tin đăng nhập không chính xác!",
-        status: "error",
-        position: "top-right",
-      });
-    }
   };
 
   return (
@@ -83,7 +64,7 @@ export default function Login() {
           justifyContent="center"
           alignItems="center"
         >
-          <Image srcSet="/zalo.png" maxW={"150px"} alt="logo" />
+          <Image srcSet="/logo.png" maxW={"150px"} alt="logo" />
           <Heading color="gray.700">Đăng nhập</Heading>
           <Box minW={{ base: "90%", md: "468px" }}>
             <form onSubmit={handleSubmit(onSubmit)}>
