@@ -60,6 +60,30 @@ class ZaloTemplatesController {
       res.status(500).send({ error: error, ok: false });
     }
   }
+
+  public async getSampleTemplate(req: Request, res: Response) {
+    const templateId = req.params.id;
+    const tokenData = readTokenFromFile();
+    try {
+      const response = await axios.get(
+        "https://business.openapi.zalo.me/template/sample-data",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            access_token: tokenData.access_token,
+          },
+          params: {
+            template_id: templateId,
+          },
+        }
+      );
+
+      return res.json({ template: response.data.data, ok: true });
+    } catch (error) {
+      console.error("Error fetching Zalo template details:", error);
+      res.status(500).send({ error: error, ok: false });
+    }
+  }
 }
 
 export default new ZaloTemplatesController();

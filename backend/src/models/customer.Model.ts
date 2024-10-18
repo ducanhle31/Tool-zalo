@@ -39,6 +39,12 @@ const CustomerSchema = new mongoose.Schema(
     metadata: { type: Object, required: false, default: {} },
     birth: { type: String, require: true },
     gender: { type: String, require: true },
+
+    custom_date: { type: String, require: true },
+    customer_name: { type: String, require: true },
+    order_code: { type: String, require: true },
+    price_number: { type: String, require: true },
+    tuition_code: { type: String, require: true },
   },
   { timestamps: true }
 );

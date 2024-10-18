@@ -136,7 +136,7 @@ export default function Page() {
               Gửi lúc
             </Th>
             <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Trạng thái
+              Kết quả
             </Th>
           </Tr>
         </Thead>
