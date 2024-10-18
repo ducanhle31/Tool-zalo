@@ -8,23 +8,21 @@ import {
   Collapse,
   HStack,
   Image,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { BsHeart } from "react-icons/bs";
 import { CiExport, CiSettings } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
 import { FiUser } from "react-icons/fi";
 import { GrGroup } from "react-icons/gr";
 import { IoIosLogOut } from "react-icons/io";
 import { IoWalletOutline } from "react-icons/io5";
 import { LuLeaf, LuPackageCheck } from "react-icons/lu";
-import { MdOutlinePlace } from "react-icons/md";
-import { FaRegCircleUser } from "react-icons/fa6";
 import {
   TbAffiliate,
   TbMessage2Dollar,
@@ -173,23 +171,15 @@ export const NavBar = () => {
   const { logout } = useSessions();
   const router = useRouter();
 
-  const [collapses, setCollapses] = useState({
-    customer: false,
-    customerGroup: false,
-    campaigns: false,
-    product: false,
-    productCategory: false,
-    wallet: false,
-    transaction: false,
-    setting: false,
-    manageZaloOa: false,
-  });
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (pathName.includes("/customers/create-customers")) {
-      setCollapses((prev) => ({ ...prev, customer: true }));
-    }
-  }, [pathName]);
+  const handleMouseEnter = (menuName: string) => {
+    setActiveMenu(menuName);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveMenu(null);
+  };
 
   return (
     <Box
@@ -212,9 +202,8 @@ export const NavBar = () => {
 
       <VStack>
         {menus.map((item, index) => (
-          <Stack key={index} w={"full"}>
+          <Box key={index} w={"full"} onMouseLeave={handleMouseLeave}>
             <HStack
-              key={index}
               as={Link}
               justifyContent={"start"}
               alignItems={"center"}
@@ -227,80 +216,32 @@ export const NavBar = () => {
               w={"full"}
               py={"12px"}
               px={"16px"}
-              onClick={() =>
-                setCollapses((prev) => {
-                  if (item.href.includes("/customers")) {
-                    return { ...prev, customer: !prev?.customer };
-                  }
-                  if (item.href.includes("/customer-groups")) {
-                    return { ...prev, customerGroup: !prev?.customerGroup };
-                  }
-                  if (item.href.includes("/campaigns")) {
-                    return { ...prev, campaigns: !prev?.campaigns };
-                  }
-                  if (item.href.includes("/products")) {
-                    return { ...prev, product: !prev?.product };
-                  }
-                  if (item.href.includes("/product-categories")) {
-                    return { ...prev, productCategory: !prev?.productCategory };
-                  }
-                  if (item.href.includes("/wallets")) {
-                    return { ...prev, wallet: !prev?.wallet };
-                  }
-                  if (item.href.includes("/transactions")) {
-                    return { ...prev, transaction: !prev?.transaction };
-                  }
-                  if (item.href.includes("/settings")) {
-                    return { ...prev, setting: !prev?.setting };
-                  }
-                  if (item.href.includes("/manage-zalo-oa")) {
-                    return { ...prev, manageZaloOa: !prev?.manageZaloOa };
-                  }
-                  return prev;
-                })
-              }
+              onMouseEnter={() => handleMouseEnter(item.name)} // Open submenu on hover
             >
               {item.icon}
-              <Text fontSize={"lg"}> {item.name}</Text>
+              <Text fontSize={"lg"}>{item.name}</Text>
             </HStack>
-            {item?.child &&
-              item?.child?.map((childItem, index) => (
-                <Collapse
-                  in={
-                    (childItem.href.includes("/customers") &&
-                      collapses?.customer) ||
-                    (childItem.href.includes("/customer-groups") &&
-                      collapses?.customerGroup) ||
-                    (childItem.href.includes("/campaigns") &&
-                      collapses?.campaigns) ||
-                    (childItem.href.includes("/products") &&
-                      collapses?.product) ||
-                    (childItem.href.includes("/product-categories") &&
-                      collapses?.productCategory) ||
-                    (childItem.href.includes("/wallets") &&
-                      collapses?.wallet) ||
-                    (childItem.href.includes("/transactions") &&
-                      collapses?.transaction) ||
-                    (childItem.href.includes("/settings") &&
-                      collapses?.setting) ||
-                    (childItem.href.includes("/manage-zalo-oa") &&
-                      collapses?.manageZaloOa)
-                  }
-                  key={index}
+
+            {item?.child && (
+              <Collapse in={activeMenu === item.name}>
+                <Box
+                  bg="gray.700"
+                  onMouseEnter={() => handleMouseEnter(item.name)}
+                  onMouseLeave={handleMouseLeave}
                 >
-                  <Box bg="gray.700">
+                  {item?.child?.map((childItem, index) => (
                     <HStack
                       key={index}
                       as={Link}
                       justifyContent={"start"}
                       alignItems={"center"}
-                      href={childItem?.href}
+                      href={childItem.href}
                       _hover={{
                         textDecoration: "none",
                         color: "teal.500",
                       }}
                       color={
-                        pathName.includes(childItem?.href)
+                        pathName.includes(childItem.href)
                           ? "teal.500"
                           : "gray.500"
                       }
@@ -309,13 +250,14 @@ export const NavBar = () => {
                       px={"12px"}
                       pl={"36px"}
                     >
-                      {childItem?.icon}
-                      <Text fontSize={"md"}> {childItem?.name}</Text>
+                      {childItem.icon}
+                      <Text fontSize={"md"}>{childItem.name}</Text>
                     </HStack>
-                  </Box>
-                </Collapse>
-              ))}
-          </Stack>
+                  ))}
+                </Box>
+              </Collapse>
+            )}
+          </Box>
         ))}
         <HStack
           as={Button}
