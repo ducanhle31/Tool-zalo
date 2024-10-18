@@ -1,0 +1,101 @@
+[
+  {
+    "campaign_name": "chiến dịch Gửi theo SĐT template  tự đông jtheo thời gian settup ",
+    "campaign_description": "chiến dịch gửi hàng loạt ",
+    "campaign_time": "2024-09-16T21:14",
+    "campaign_type": "ZNS",
+    "templateId": "366532",
+    "sendMode": "auto",
+    "customers": [
+      {
+        "id": 1,
+        "phone": "84344480909",
+        "customers": "4394289571948868868",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "20/03/2020",
+        "order_code": "PE010299485",
+        "status": "success"
+      },
+      {
+        "id": 2,
+        "phone": "8430",
+        "customers": "4394289571948868868",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "20/03/2020",
+        "order_code": "PE01029948787875",
+        "status": "failure"
+      }
+    ],
+    "campaign_id": "54a3733f-13aa-433f-9606-8c0000c47811",
+    "status": "success",
+    "total_successful_requests": 1
+  },
+  {
+    "campaign_name": "chiến dịch thanh toán học phí tự động theo seetup ",
+    "campaign_description": "chiến dịch gửi hàng loạt dfgd f",
+    "campaign_time": "2024-09-16T21:16",
+    "campaign_type": "ZNS",
+    "templateId": "366485",
+    "sendMode": "auto",
+    "customers": [
+      {
+        "id": 1,
+        "phone": "84344480909",
+        "customers": "4394289571948868868",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "",
+        "order_code": "PE010299485",
+        "tuition_code": "PE010299485",
+        "price_number": "1000",
+        "custom_date": "20/03/2020",
+        "status": "success"
+      },
+      {
+        "id": 2,
+        "phone": "84376022820",
+        "customers": "4394289571948868868",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "20/03/2020",
+        "order_code": "PE01029948787875",
+        "tuition_code": "PD010299485",
+        "price_number": "2000",
+        "custom_date": "30/03/2020",
+        "status": "success"
+      }
+    ],
+    "campaign_id": "4f701c8e-c926-4331-8a31-eacfa0dd69cb",
+    "status": "success",
+    "total_successful_requests": 2
+  },
+  {
+    "campaign_name": "chiến dịch Gửi theo UID tự động",
+    "campaign_description": "chiến dịch gửi hàng loạt theo UID",
+    "campaign_time": "2024-09-16T21:18",
+    "campaign_type": "UID",
+    "templateId": "123456",
+    "sendMode": "auto",
+    "customers": [
+      {
+        "id": 1,
+        "phone": "84344480909",
+        "customers": "2559231188943244647",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "20/03/2020",
+        "order_code": "PE010299485",
+        "status": "success"
+      },
+      {
+        "id": 2,
+        "phone": "84376022820",
+        "customers": "4398",
+        "customer_name": "Nguyễn Thị Hoàng Anh",
+        "order_date": "20/03/2020",
+        "order_code": "PE01029948787875",
+        "status": "failure"
+      }
+    ],
+    "campaign_id": "24a5815c-f1c7-4e2b-984c-f7f61f99045c",
+    "status": "success",
+    "total_successful_requests": 1
+  }
+]
