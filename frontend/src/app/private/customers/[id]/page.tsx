@@ -155,6 +155,8 @@ export default function CustomerDetail({ params }: { params: { id: string } }) {
                     createWalletMutation.mutate({
                       customer: customer?._id!,
                       status: "active",
+                      user: customer?._id!,
+                      facility: "",
                     })
                   }
                 >

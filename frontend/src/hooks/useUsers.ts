@@ -84,16 +84,16 @@ export const useUsersOA = () => {
   };
 };
 
-export const useUserOA = (userId: string) => {
+export const useUserOA = (id: string) => {
   const [useroa, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     const getUser = async () => {
       setIsLoading(true);
       try {
-        const response = await instance.get(`/authzalo/user/${userId}`);
+        const response = await instance.get(`/authzalo/user/${id}`);
         const data = await response.data;
-        const user = data?.user;
+        const user = data?.data;
         user && setUser(user);
         setIsLoading(false);
       } catch (error) {
@@ -102,7 +102,7 @@ export const useUserOA = (userId: string) => {
     };
 
     getUser();
-  }, [userId]);
+  }, [id]);
 
   return {
     useroa,

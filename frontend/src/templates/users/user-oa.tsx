@@ -1,10 +1,11 @@
 "use client";
 
 import { UserOa } from "@/types/global";
-import { Box, Card, CardProps, HStack, Link, Text } from "@chakra-ui/react";
+import { Box, Card, CardProps, HStack, Text } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
 
 interface UserOaProps extends CardProps {
-  user: UserOa ;
+  user: UserOa;
 }
 
 export const UserOaDetail = (props: UserOaProps) => {

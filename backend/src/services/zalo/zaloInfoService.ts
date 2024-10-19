@@ -66,11 +66,11 @@ export const getUserOa = async () => {
   }
 };
 
-export const getUserDetail = async (userId: string) => {
+export const getUserDetail = async (id: string) => {
   const tokenData = readTokenFromFile();
   const url = `https://openapi.zalo.me/v3.0/oa/user/detail`;
   const dataParam = {
-    user_id: userId, 
+    user_id: id, 
   };
 
   try {

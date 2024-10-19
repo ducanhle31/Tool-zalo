@@ -69,8 +69,8 @@ export default function Page() {
         columns={{ base: 1, sm: 2, md: 4, lg: 4, xl: 4, "2xl": 4 }}
         gap={"18px"}
       >
-        {paginatedUsers?.map((user) => (
-          <UserOaDetail user={user} key={user?.user_id} />
+        {paginatedUsers?.map((user, index) => (
+          <UserOaDetail user={user} key={`${user?.user_id}-${index}`} />
         ))}
       </SimpleGrid>
     </>

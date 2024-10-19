@@ -56,9 +56,9 @@ class AuthZaloController {
     }
   };
   public userOaDetail = async (req: Request, res: Response) => {
-    const userId = req.params.id;
+    const id = req.params.id;
     try {
-      const userOa = await getUserDetail(userId);
+      const userOa = await getUserDetail(id);
       res.status(200).json(userOa);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
