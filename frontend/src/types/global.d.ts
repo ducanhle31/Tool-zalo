@@ -304,3 +304,15 @@ export type OaInfo = {
   package_auto_renew_date: string;
   linked_zca: string;
 };
+
+export type UserOa = {
+  user_id: string;
+};
+
+
+export type UsersOa = {
+  total: number;
+  count: number;
+  offset: number;
+  users: UserOa[];
+};

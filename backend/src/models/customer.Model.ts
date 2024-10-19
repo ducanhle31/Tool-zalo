@@ -45,6 +45,7 @@ const CustomerSchema = new mongoose.Schema(
     order_code: { type: String, require: true },
     price_number: { type: String, require: true },
     tuition_code: { type: String, require: true },
+    order_date: { type: String, require: true },
   },
   { timestamps: true }
 );

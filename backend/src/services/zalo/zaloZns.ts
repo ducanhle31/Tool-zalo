@@ -199,14 +199,11 @@ export const sendZns = async ({
   const { access_token } = readTokenFromFile();
   const url = "https://business.openapi.zalo.me/message/template";
 
-  // Assume the template fields are retrieved from the response as shown in your example
-  const templateFields = {
-    order_code: "order_code_sample",
-    tuition_code: "tuition_code_sample",
-    custom_date: "01/01/1970",
-    price_number: 1000,
-    customer_name: "customer_name_sample",
-  };
+    const templateFields = await getTemplateSampleData(template);
+    if (!templateFields) {
+      console.error("Failed to fetch template fields, aborting ZNS send.");
+      return;
+    }
 
   const customerResults: any[] = [];
 

@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { FilterInput } from "@/components/FilterInput";
 import { SearchInput } from "@/components/SearchInput";
 import { useCustomerGroups } from "@/hooks/useCustomerGroups";

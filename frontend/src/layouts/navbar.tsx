@@ -134,6 +134,11 @@ const menus = [
         icon: <TbMessage2Heart fontSize={"20px"} />,
         href: "/private/manage-zalo-oa/uid-template",
       },
+      {
+        name: "Khách hàng từ OA",
+        icon: <TbMessage2Heart fontSize={"20px"} />,
+        href: "/private/manage-zalo-oa/user",
+      },
     ],
   },
   {
