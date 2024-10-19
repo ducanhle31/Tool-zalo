@@ -8,5 +8,10 @@ authZaloRouter.get("/login", authZaloController.authZalo);
 authZaloRouter.get("/callback", authZaloController.callback);
 authZaloRouter.get("/info", validateAccessToken, authZaloController.infoZalo);
 authZaloRouter.get("/user", validateAccessToken, authZaloController.userOa);
+authZaloRouter.get(
+  "/user/:id",
+  validateAccessToken,
+  authZaloController.userOaDetail
+);
 
 export { authZaloRouter };

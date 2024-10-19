@@ -1,9 +1,8 @@
 "use client";
 import usePagination from "@/hooks/usePagination";
 import { useUsersOA } from "@/hooks/useUsers";
-import { UserOa } from "@/types/global";
+import { UserOaDetail } from "@/templates/users/user-oa";
 import {
-  Box,
   Center,
   HStack,
   IconButton,
@@ -70,16 +69,8 @@ export default function Page() {
         columns={{ base: 1, sm: 2, md: 4, lg: 4, xl: 4, "2xl": 4 }}
         gap={"18px"}
       >
-        {paginatedUsers?.map((user: UserOa) => (
-          <Box
-            key={user.user_id}
-            padding={4}
-            borderWidth={1}
-            borderRadius="md"
-            boxShadow="md"
-          >
-            <Text fontSize="lg">User ID: {user.user_id}</Text>
-          </Box>
+        {paginatedUsers?.map((user) => (
+          <UserOaDetail user={user} key={user?.user_id} />
         ))}
       </SimpleGrid>
     </>
