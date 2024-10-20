@@ -29,12 +29,15 @@ const campaignSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    customer_results: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "campaign_result",
-      },
-    ],
+    customer_results: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "campaign_result",
+        },
+      ],
+      default: null,
+    },
   },
   { timestamps: true }
 );
