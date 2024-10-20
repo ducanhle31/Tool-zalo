@@ -5,6 +5,7 @@ const CustomerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, default: null },
+    uid: { type: String, required: false, default: "" },
     is_follow_oa: { type: Boolean, default: false },
     address: {
       type: {

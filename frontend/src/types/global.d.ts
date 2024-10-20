@@ -137,6 +137,16 @@ export type CustomerGroup = {
   updatedAt: Date;
 };
 
+export type RequestUserInfo = {
+  _id: string;
+  title: string;
+  subtitle: string;
+  image_url: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type WalletPreview = {
   _id: string;
   status: string;

@@ -1,18 +1,18 @@
 "use client";
 
-import { TemplateForm } from "@/templates/template-zalo/template-form";
+import { RequestUserInfoForm } from "@/templates/template-zalo/request-user-info-form";
 import { Link } from "@chakra-ui/next-js";
 import {
-    Box,
-    Heading,
-    HStack,
-    Icon,
-    IconButton,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
+  Box,
+  Heading,
+  HStack,
+  Icon,
+  IconButton,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
@@ -25,7 +25,7 @@ export default function CreateTemplate() {
     <Box color={"gray.600"}>
       <HStack py={"12px"} pb={"48px"}>
         <Link
-          href={"/private/manage-zalo-oa"}
+          href={"/private/manage-zalo-oa/uid-template"}
           display={"flex"}
           alignItems={"center"}
         >
@@ -52,7 +52,7 @@ export default function CreateTemplate() {
           {Array.from({ length: tabs })?.map((item, index) => (
             <TabPanel key={index} px={0}>
               <Box maxW={"1000px"}>
-                <TemplateForm />
+                <RequestUserInfoForm />
               </Box>
             </TabPanel>
           ))}

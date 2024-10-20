@@ -285,7 +285,6 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
                         label: item?.templateName,
                         value: item?.templateId,
                       }))}
-                      // onChange={onChange}
                       onChange={(selectedOption) => {
                         onChange(selectedOption);
                         handleTemplateChange(selectedOption);

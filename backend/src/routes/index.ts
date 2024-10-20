@@ -15,6 +15,7 @@ import { transactionsRouter } from "./transactions.Route";
 import { userRoutes } from "./users.Route";
 import { walletsRouter } from "./wallets.Route";
 import { zaloTemplatesRoutes } from "./zaloTemplates.Route";
+import { requestUserInfoRoutes } from "./request-user-info.Router";
 
 const commonRouter = express.Router();
 
@@ -34,5 +35,6 @@ commonRouter.use("/campaigns-result", campaignsresultRoutes);
 commonRouter.use("/zalo-templates", zaloTemplatesRoutes);
 commonRouter.use("/transaction-forms", transactionFormsRouter);
 commonRouter.use("/transaction-types", transactionTypesRouter);
+commonRouter.use("/request-user-info", requestUserInfoRoutes);
 
 export { commonRouter };

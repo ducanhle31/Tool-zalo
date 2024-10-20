@@ -1,12 +1,13 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import { CustomerGroup } from "@/types/global";
+import { RequestUserInfo } from "@/types/global";
 import {
-  createCustomerGroup,
-  deleteCustomerGroup,
-  updateCustomerGroup,
-} from "@/untils/methods/upCustommerGroups";
+  createRequestUserInfo,
+  deleteRequestUserInfo,
+  updateRequestUserInfo,
+} from "@/untils/methods/upRequestUserInfo";
+
 import { Link } from "@chakra-ui/next-js";
 import {
   Button,
@@ -42,15 +43,15 @@ import { MdOutlineDescription } from "react-icons/md";
 const CFaUserAlt = chakra(FaUserAlt);
 
 type Inputs = {
-  name: string;
-  description: string;
-  slug: string | null;
+  title: string;
+  subtitle: string;
+  image_url: string | null;
 };
 
-export const CustomerGroupForm = ({
-  customerGroup,
+export const RequestUserInfoForm = ({
+  RequestUserInfo,
 }: {
-  customerGroup?: CustomerGroup;
+  RequestUserInfo?: RequestUserInfo;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
@@ -63,8 +64,8 @@ export const CustomerGroupForm = ({
     formState: { errors },
   } = useForm<Inputs>();
 
-  const createCustomerGroupMutation = useMutation({
-    mutationFn: createCustomerGroup,
+  const createRequestUserInfoMutation = useMutation({
+    mutationFn: createRequestUserInfo,
     onSuccess: async (data) => {
       const res = await data.json();
       if (res?.ok) {
@@ -93,8 +94,8 @@ export const CustomerGroupForm = ({
     },
   });
 
-  const updateCustomerGroupMutation = useMutation({
-    mutationFn: updateCustomerGroup,
+  const updateRequestUserInfoMutation = useMutation({
+    mutationFn: updateRequestUserInfo,
     onSuccess: async (data) => {
       const res = await data.json();
       if (res?.ok) {
@@ -123,8 +124,8 @@ export const CustomerGroupForm = ({
     },
   });
 
-  const deleteCustomerGroupMutation = useMutation({
-    mutationFn: deleteCustomerGroup,
+  const deleteRequestUserInfoMutation = useMutation({
+    mutationFn: deleteRequestUserInfo,
     onSuccess: async (data) => {
       const res = await data.json();
       if (res?.ok) {
@@ -162,38 +163,37 @@ export const CustomerGroupForm = ({
 
     if (!data) return;
 
-    const currentCustomerGroup: Omit<CustomerGroup, "createdAt" | "updatedAt"> =
-      {
-        _id: customerGroup?._id!,
-        name: data?.name,
-        description: data?.description,
-        slug: data?.slug || "",
-        status: "active",
-        count: 0,
-        user: null,
-        facility: null,
-      };
+    const currentRequestUserInfo: Omit<
+      RequestUserInfo,
+      "createdAt" | "updatedAt"
+    > = {
+      _id: RequestUserInfo?._id!,
+      title: data?.title,
+      subtitle: data?.subtitle,
+      image_url: data?.image_url || "",
+      status: "active",
+    };
 
     buttonName === "create" &&
-      createCustomerGroupMutation.mutate(currentCustomerGroup);
+      createRequestUserInfoMutation.mutate(currentRequestUserInfo);
 
     buttonName === "update" &&
-      updateCustomerGroupMutation.mutate(currentCustomerGroup);
+      updateRequestUserInfoMutation.mutate(currentRequestUserInfo);
   };
 
   useEffect(() => {
-    if (customerGroup?.name) {
-      setValue("name", customerGroup.name);
+    if (RequestUserInfo?.title) {
+      setValue("title", RequestUserInfo.title);
     }
 
-    if (customerGroup?.slug) {
-      setValue("slug", customerGroup.slug);
+    if (RequestUserInfo?.subtitle) {
+      setValue("subtitle", RequestUserInfo.subtitle);
     }
 
-    if (customerGroup?.description) {
-      setValue("description", customerGroup.description);
+    if (RequestUserInfo?.image_url) {
+      setValue("image_url", RequestUserInfo.image_url);
     }
-  }, [customerGroup, setValue]);
+  }, [RequestUserInfo, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -213,10 +213,10 @@ export const CustomerGroupForm = ({
                 />
                 <Input
                   rounded={"sm"}
-                  {...register("name", { required: true })}
+                  {...register("title", { required: true })}
                   type="text"
                 />
-                {errors.name && (
+                {errors.title && (
                   <FormHelperText color="red.300">
                     Tên nhóm là bắt buộc
                   </FormHelperText>
@@ -233,10 +233,10 @@ export const CustomerGroupForm = ({
                 />
                 <Input
                   rounded={"sm"}
-                  {...register("slug", { required: true })}
+                  {...register("image_url", { required: true })}
                   placeholder="/duong-dan-cua-nhom"
                 />
-                {errors.slug && (
+                {errors.image_url && (
                   <FormHelperText color="red.300">
                     Đường dẫn là bắt buộc
                   </FormHelperText>
@@ -255,10 +255,10 @@ export const CustomerGroupForm = ({
               <Input
                 as={Textarea}
                 rounded={"sm"}
-                {...register("description", { required: true })}
+                {...register("subtitle", { required: true })}
                 placeholder="Nhập mô tả của nhóm"
               />
-              {errors.description && (
+              {errors.subtitle && (
                 <FormHelperText color="red.300">
                   Mô tả là bắt buộc
                 </FormHelperText>
@@ -266,10 +266,10 @@ export const CustomerGroupForm = ({
             </InputGroup>
           </FormControl>
 
-          {customerGroup && (
+          {RequestUserInfo && (
             <FormControl>
               <FormLabel>_id</FormLabel>
-              <Input readOnly rounded={"sm"} value={customerGroup?._id} />
+              <Input readOnly rounded={"sm"} value={RequestUserInfo?._id} />
             </FormControl>
           )}
         </Stack>
@@ -286,7 +286,7 @@ export const CustomerGroupForm = ({
         >
           Hủy
         </Button>
-        {customerGroup && (
+        {RequestUserInfo && (
           <>
             <>
               <Button
@@ -313,7 +313,9 @@ export const CustomerGroupForm = ({
                       rounded={"sm"}
                       colorScheme="red"
                       onClick={() =>
-                        deleteCustomerGroupMutation.mutate(customerGroup._id)
+                        deleteRequestUserInfoMutation.mutate(
+                          RequestUserInfo._id
+                        )
                       }
                     >
                       Xóa
@@ -342,7 +344,7 @@ export const CustomerGroupForm = ({
             </Button>
           </>
         )}
-        {!customerGroup && (
+        {!RequestUserInfo && (
           <Button
             rounded={"sm"}
             size={"lg"}
