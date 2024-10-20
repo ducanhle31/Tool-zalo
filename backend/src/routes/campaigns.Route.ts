@@ -1,5 +1,6 @@
 import { Router } from "express";
 import campaignsController from "../controllers/campaigns.Controller";
+import campaignsResultController from "../controllers/campaign-result.Controller";
 import { validateAccessToken } from "../middleware/auth.Middleware";
 
 const campaignsRoutes = Router();

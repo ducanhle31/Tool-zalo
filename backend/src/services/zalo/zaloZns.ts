@@ -2,6 +2,7 @@ import axios from "axios";
 import nodeCron from "node-cron";
 import { Campaign } from "../../models/campaign.Model";
 import { readTokenFromFile } from "./zaloJobTokenService";
+import { CampaignResult } from "../../models/campaign-result.Model";
 
 export const scheduledJobs = new Map<string, nodeCron.ScheduledTask>();
 
@@ -36,11 +37,13 @@ const getTemplateSampleData = async (template: string) => {
 
 export const sendZns = async ({
   template,
+  name,
   customers,
-  _id,
+  _id, 
   cb,
 }: {
   template: string;
+  name: string;
   customers: any[];
   _id?: string;
   cb: (response: { template: string; customers: any[] }) => void;
@@ -54,7 +57,7 @@ export const sendZns = async ({
     return;
   }
 
-  const customerResults: any[] = [];
+  const campaignResults: any[] = [];
   const formatPhoneNumber = (phone: string) => {
     if (phone.startsWith("0")) {
       return `84${phone.slice(1)}`;
@@ -86,21 +89,25 @@ export const sendZns = async ({
           },
         });
         const isSuccess = response.data.error === 0;
-        customerResults.push({
+        campaignResults.push({
           template: template,
           name: customer.name,
           phone: customer.phone,
           createdAt: sendTime,
           status: isSuccess ? "success" : "failure",
+          campaign_name: name,
+          campaign_id: _id,
         });
       } catch (error) {
         console.error(`Error sending ZNS for phone ${customer.phone}:`, error);
-        customerResults.push({
+        campaignResults.push({
           template: template,
           name: customer.name,
           phone: customer.phone,
           createdAt: sendTime,
           status: "failure",
+          campaign_name: name,
+          campaign_id: _id,
         });
       }
     })
@@ -108,29 +115,28 @@ export const sendZns = async ({
 
   if (_id) {
     try {
-      const existingCampaign = await Campaign.findById(_id);
-      const updatedCustomerResults = [
-        ...(existingCampaign?.customer_results || []),
-        ...customerResults,
-      ];
-
-      await Campaign.findByIdAndUpdate(_id, {
-        $set: { customer_results: updatedCustomerResults },
-      });
+      // Lưu kết quả vào CustomerResult
+      await CampaignResult.insertMany(campaignResults);
     } catch (err) {
-      console.error(`Failed to update campaign ${_id}:`, err);
+      console.error(
+        `Failed to save customer results for campaign ${_id}:`,
+        err
+      );
     }
   }
-  cb({ template, customers: customerResults });
+
+  cb({ template, customers: campaignResults });
 };
 
 export const scheduleZns = ({
   template,
+  name,
   customers,
   startAt,
   _id,
 }: {
   template: string;
+  name: string;
   customers: any[];
   startAt: Date | string;
   _id?: string;
@@ -146,6 +152,7 @@ export const scheduleZns = ({
     const job = nodeCron.schedule(cronTime, () => {
       sendZns({
         template,
+        name,
         customers,
         _id,
         cb: (response) => {
@@ -161,6 +168,7 @@ export const scheduleZns = ({
   } else {
     sendZns({
       template,
+      name,
       customers,
       _id,
       cb: (response) => {

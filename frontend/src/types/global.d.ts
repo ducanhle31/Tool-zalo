@@ -99,6 +99,18 @@ export type Customer = {
   updatedAt: Date;
 };
 
+export type CampaignResult = {
+  _id: string;
+  name: string;
+  phone: string;
+  template: string;
+  status: string;
+  campaign_name: string;
+  campaign_id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type CustomerGroupPreview = {
   _id: string;
   name: string;
@@ -308,7 +320,6 @@ export type OaInfo = {
 export type UserOa = {
   user_id: string;
 };
-
 
 export type UsersOa = {
   total: number;

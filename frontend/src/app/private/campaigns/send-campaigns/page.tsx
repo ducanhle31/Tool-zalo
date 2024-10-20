@@ -1,7 +1,7 @@
 "use client";
 
 import { SearchInput } from "@/components/SearchInput";
-import { useCampaigns } from "@/hooks/useCampaigns";
+import { useCampaignResult } from "@/hooks/useCampaigns";
 import usePagination from "@/hooks/usePagination";
 import { Link } from "@chakra-ui/next-js";
 import {
@@ -26,34 +26,36 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 export default function Page() {
   const [search, setSearch] = useState("");
-  const { campaigns, isLoading } = useCampaigns();
+  const { campaignsresult, isLoading } = useCampaignResult();
 
-  const campaignsFilters =
-    campaigns?.filter(
+  const filteredCampaignsResult =
+    campaignsresult?.filter(
       (campaign) =>
         !search ||
         campaign?.name
           ?.toLocaleLowerCase()
-          .trim()
           .includes(search.toLocaleLowerCase().trim())
     ) || [];
 
-  const rows = campaignsFilters.flatMap(
-    (campaign) =>
-      campaign.customer_results?.map((result) => ({
-        campaignName: campaign.name,
-        campaignID: campaign._id,
-        campaignStatus: campaign.status,
-        result,
-      })) || []
-  );
+  // Flattening customer results and combining campaign details
+  const rows = filteredCampaignsResult.flatMap((campaign) => {
+    return {
+      campaignName: campaign.campaign_name,
+      campaignID: campaign.campaign_id,
+      template: campaign.template,
+      status: campaign.status,
+      createdAt: campaign.createdAt,
+      customerName: campaign.name,
+      phone: campaign.phone,
+    };
+  });
 
   const { currentPage, nextPage, prevPage, totalPages } = usePagination({
     total: rows.length,
     perpage: 20,
   });
 
-  const rowsPag = rows.slice((currentPage - 1) * 20, currentPage * 20);
+  const rowsPaginated = rows.slice((currentPage - 1) * 20, currentPage * 20);
 
   if (isLoading) {
     return (
@@ -68,7 +70,7 @@ export default function Page() {
       <HStack mt={"24px"} flexWrap={"wrap"}>
         <Button
           as={Link}
-          href={"/private/campaigns/create-campaigns"}
+          href={"/private/campaignsresult/create-campaignsresult"}
           rounded={"sm"}
           leftIcon={<FaPlus />}
           colorScheme="teal"
@@ -114,73 +116,45 @@ export default function Page() {
       <Table variant="simple" mb={8} bgColor={"#f1f4f9"}>
         <Thead bgColor={"#e1e3ea"}>
           <Tr fontWeight={"bold"} fontSize={"2xl"}>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Tên chiến dịch
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              ID chiến dịch
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-             Loại chiến dịch
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              ID mẫu tin
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Người nhận
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Số điện thoại
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Gửi lúc
-            </Th>
-            <Th position="sticky" top="0" zIndex="1" bgColor={"#e1e3ea"}>
-              Kết quả
-            </Th>
+            <Th>Tên chiến dịch</Th>
+            <Th>ID chiến dịch</Th>
+            <Th>Id mẫu tin</Th>
+            <Th>Trạng thái gửi</Th>
+            <Th>Ngày gửi</Th>
+            <Th>Tên khách hàng</Th>
+            <Th>Số điện thoại</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {rowsPag.length > 0 ? (
-            rowsPag.map((row, index) => (
+          {rowsPaginated.length > 0 ? (
+            rowsPaginated.map((row, index) => (
               <Tr key={index} fontSize="sm" _hover={{ bgColor: "white" }}>
                 <Td>{row.campaignName}</Td>
                 <Td>{row.campaignID}</Td>
-                <Td>{row.campaignStatus}</Td>
-                <Td>{row.result.template?.toString()}</Td>
-                <Td>{row.result.name}</Td>
-                <Td>{row.result.phone}</Td>
-                <Td>
-                  {row.result.createdAt
-                    ? new Date(row.result.createdAt).toLocaleString("en-GB", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })
-                    : "N/A"}
-                </Td>
+                <Td>{row.template}</Td>
                 <Td>
                   <Text
                     color={
-                      row.result.status === "success"
+                      row.status === "success"
                         ? "green.500"
-                        : row.result.status === "failure"
+                        : row.status === "failure"
                         ? "red.500"
                         : "black"
                     }
                   >
-                    {row.result.status === "failure"
-                      ? "Thất bại"
-                      : row.result.status === "success"
-                      ? "Thành công"
-                      : row.result.status}
+                    {row.status === "failure" ? "Thất bại" : "Thành công"}
                   </Text>
                 </Td>
+                <Td>{new Date(row.createdAt).toLocaleString()}</Td>
+                <Td>{row.customerName}</Td>
+                <Td>{row.phone}</Td>
               </Tr>
             ))
           ) : (
             <Tr>
-              <Td colSpan={6} textAlign="center">
+              <Td colSpan={7} textAlign="center">
                 <Text fontSize="xs" color="gray.500">
-                  No customer results available
+                  Không có kết quả
                 </Text>
               </Td>
             </Tr>

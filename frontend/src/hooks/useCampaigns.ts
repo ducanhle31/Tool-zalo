@@ -1,6 +1,6 @@
 "use client";
 
-import { Campaign } from "@/types/global";
+import { Campaign, CampaignResult } from "@/types/global";
 import { instance } from "@/untils/instance";
 import { useEffect, useState } from "react";
 
@@ -50,6 +50,29 @@ export const useCampaign = (id: string) => {
 
   return {
     campaign,
+    isLoading,
+  };
+};
+
+export const useCampaignResult = () => {
+  const [campaignsresult, setCampaigns] = useState<CampaignResult[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getCampaigns = async () => {
+      setIsLoading(true);
+      const response = await instance.get(`campaigns-result`);
+      const data = await response.data;
+      const campaignsresult = data?.campaignsresult;
+      campaignsresult && setCampaigns(campaignsresult);
+      setIsLoading(false);
+    };
+
+    getCampaigns();
+  }, []);
+
+  return {
+    campaignsresult,
     isLoading,
   };
 };

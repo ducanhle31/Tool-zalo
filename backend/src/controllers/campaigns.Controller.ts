@@ -57,6 +57,7 @@ class CampaignsController {
         error_type: "require",
       });
     }
+    0;
 
     try {
       const groupSame = await Campaign.findOne({ name });
@@ -77,7 +78,7 @@ class CampaignsController {
       });
 
       if (status === "active" && template) {
-        scheduleZns({ template, customers, startAt, _id: result[0]._id });
+        scheduleZns({ template, customers, name, startAt, _id: result[0]._id });
       }
       return res.json({ result, ok: true });
     } catch (error) {
@@ -93,6 +94,7 @@ class CampaignsController {
     const template = campaign?.template;
     const startAt = campaign?.startAt;
     const templateType = campaign?.templateType;
+    const name = campaign?.name;
 
     delete campaign?._id;
 
@@ -117,7 +119,7 @@ class CampaignsController {
       //   template === "" &&
       //   sendZns({ template, customers, startAt, cb: () => {} });
       if (status === "active" && template) {
-        scheduleZns({ template, customers, startAt, _id });
+        scheduleZns({ template, customers, name, startAt, _id });
       }
       return res.status(200).json({ campaign: result, ok: true });
     } catch (error) {
