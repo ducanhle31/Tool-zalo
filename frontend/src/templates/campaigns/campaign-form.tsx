@@ -31,6 +31,7 @@ import {
   ModalOverlay,
   SimpleGrid,
   Stack,
+  Text,
   Textarea,
   useDisclosure,
   useToast,
@@ -53,6 +54,11 @@ type Inputs = {
   template: { label: string; value: string };
 };
 
+type OptionType = {
+  label: string;
+  value: string;
+};
+
 export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
@@ -61,6 +67,7 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
   const { zaloTemplates } = useZaloTemplates();
   const [id, setSelectedTemplateId] = useState<string>("");
   const { zaloTemplate } = useZaloTemplate(id);
+  const [selectedType, setSelectedType] = useState<OptionType | null>(null);
 
   const {
     register,
@@ -221,6 +228,9 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
     }
   }, [campaign, setValue]);
 
+  const handleTypeChange = (selectedOption: OptionType | null) => {
+    setSelectedType(selectedOption);
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={6}>
@@ -264,61 +274,77 @@ export const CampaignForm = ({ campaign }: { campaign?: Campaign }) => {
             </InputGroup>
           </FormControl>
         </Stack>
-
         <Stack>
-          <Heading size={"sm"}>Chọn loại tin mẫu</Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={"4"}>
-            <Box>
-              <Controller
-                control={control}
-                {...register("template", { required: true })}
-                render={({
-                  field: { onChange, onBlur, value, name, ref },
-                  formState: { errors },
-                }) => (
-                  <FormControl
-                    isInvalid={!!errors.template}
-                    id="campaign-template"
-                  >
-                    <Select
-                      options={zaloTemplates?.map((item) => ({
-                        label: item?.templateName,
-                        value: item?.templateId,
-                      }))}
-                      onChange={(selectedOption) => {
-                        onChange(selectedOption);
-                        handleTemplateChange(selectedOption);
-                      }}
-                      onBlur={onBlur}
-                      value={value}
-                      name={name}
-                      ref={ref}
-                      placeholder="Mẫu tin"
-                    />
-                    {errors.template && (
-                      <FormHelperText color="red.300">
-                        Mẫu tin là bắt buộc!
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                )}
-              />
-            </Box>
-            <Box bgColor={"white"}>
-              {zaloTemplate ? (
-                <iframe
-                  src={zaloTemplate.previewUrl}
-                  title="Preview"
-                  width="100%"
-                  height="350px"
-                  style={{ backgroundColor: "white" }}
-                />
-              ) : (
-                <Heading size="sm">Chọn mẫu tin</Heading>
-              )}
-            </Box>
-          </SimpleGrid>
+          <FormControl>
+          <Heading size={"sm"}>Chọn loại tin</Heading>
+            <Select<OptionType>
+              options={[
+                { label: "Tin ZNS", value: "zns" },
+                { label: "Tin giao dịch", value: "giaodich" },
+                { label: "Tin truyền thông", value: "truyenthong" },
+              ]}
+              onChange={handleTypeChange}
+              placeholder="Chọn loại tin"
+            />
+          </FormControl>
+          {selectedType && <Text mt={2}>{selectedType.label}</Text>}
         </Stack>
+        {selectedType?.value === "zns" && (
+          <Stack>
+            <Heading size={"sm"}>Chọn mẫu tin ZNS</Heading>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={"4"}>
+              <Box>
+                <Controller
+                  control={control}
+                  {...register("template", { required: true })}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                    formState: { errors },
+                  }) => (
+                    <FormControl
+                      isInvalid={!!errors.template}
+                      id="campaign-template"
+                    >
+                      <Select
+                        options={zaloTemplates?.map((item) => ({
+                          label: item?.templateName,
+                          value: item?.templateId,
+                        }))}
+                        onChange={(selectedOption) => {
+                          onChange(selectedOption);
+                          handleTemplateChange(selectedOption);
+                        }}
+                        onBlur={onBlur}
+                        value={value}
+                        name={name}
+                        ref={ref}
+                        placeholder="Mẫu tin"
+                      />
+                      {errors.template && (
+                        <FormHelperText color="red.300">
+                          Mẫu tin là bắt buộc!
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  )}
+                />
+              </Box>
+              <Box bgColor={"white"}>
+                {zaloTemplate ? (
+                  <iframe
+                    src={zaloTemplate.previewUrl}
+                    title="Preview"
+                    width="100%"
+                    height="350px"
+                    style={{ backgroundColor: "white" }}
+                  />
+                ) : (
+                  <Heading size="sm">Chọn mẫu tin</Heading>
+                )}
+              </Box>
+            </SimpleGrid>
+          </Stack>
+        )}
 
         <Stack>
           <Heading size={"sm"}>Chọn nhóm khách hàng</Heading>
