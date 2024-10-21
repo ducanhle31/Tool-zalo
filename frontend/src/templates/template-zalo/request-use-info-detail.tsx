@@ -1,7 +1,7 @@
 "use client";
 
 import { RequestUserInfo } from "@/types/global";
-import { deleteCustomer } from "@/untils/methods/upCustommers";
+import { deleteRequestUserInfo } from "@/untils/methods/upRequestUserInfo";
 import {
   Button,
   Card,
@@ -10,6 +10,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -28,7 +29,7 @@ import { FaTrash } from "react-icons/fa";
 import Moment from "react-moment";
 
 export interface CardCustomer extends CardProps {
-  customer: RequestUserInfo;
+  requestuserinfos: RequestUserInfo;
   view?: boolean;
   edit?: boolean;
   href?: string;
@@ -39,10 +40,17 @@ export const RequestUseInfoDetail = (props: CardCustomer) => {
   const toast = useToast();
   const router = useRouter();
 
-  const { customer, view = true, edit = true, href, children, ...args } = props;
+  const {
+    requestuserinfos,
+    view = true,
+    edit = true,
+    href,
+    children,
+    ...args
+  } = props;
 
-  const deleleCustomerMutation = useMutation({
-    mutationFn: deleteCustomer,
+  const deleleRequestUserInfoMutation = useMutation({
+    mutationFn: deleteRequestUserInfo,
     onSuccess: async (res) => {
       const data = await res.json();
       if (data?.ok) {
@@ -53,7 +61,7 @@ export const RequestUseInfoDetail = (props: CardCustomer) => {
           position: "top-right",
         });
         onClose();
-        router.push("/private/customers/redirect");
+        router.push("/private/manage-zalo-oa/uid-template");
       } else {
         toast({
           title: "Thất bại",
@@ -77,14 +85,7 @@ export const RequestUseInfoDetail = (props: CardCustomer) => {
   });
 
   return (
-    <Card
-      px={"12px"}
-      py={"12px"}
-      rounded={"sm"}
-      minW={"min-content"}
-      pos={"relative"}
-      {...args}
-    >
+    <Card px={"12px"} py={"12px"} rounded={"sm"} pos={"relative"} {...args}>
       <HStack position="absolute" bottom="0" right="0">
         {edit && (
           <>
@@ -115,7 +116,9 @@ export const RequestUseInfoDetail = (props: CardCustomer) => {
                     rounded={"sm"}
                     colorScheme="red"
                     onClick={() =>
-                      deleleCustomerMutation.mutate(customer?._id!)
+                      deleleRequestUserInfoMutation.mutate(
+                        requestuserinfos?._id!
+                      )
                     }
                   >
                     Xóa
@@ -137,20 +140,21 @@ export const RequestUseInfoDetail = (props: CardCustomer) => {
       </HStack>
       <HStack>
         <Stack>
-          <Text fontSize={"xs"}>{customer?.image_url} </Text>
-          <Heading minW={"min-content"} size={"sm"} isTruncated>
-            {customer?.title}
-          </Heading>
-          <HStack alignItems={"end"}>
-            <Text fontSize={"xs"}>Tạo: </Text>
+          <Image
+            src={requestuserinfos?.image_url}
+            alt={requestuserinfos?.title}
+            objectFit="cover"
+            borderRadius="md"
+          />
+          <Heading size={"md"}>{requestuserinfos?.title}</Heading>
+          <Text size={"sm"} color={"gray.500"}>
+            {requestuserinfos?.subtitle}
+          </Text>
+
+          <HStack alignItems={"end"} mt={2}>
+            <Text fontSize={"xs"}>Tạo lúc: </Text>
             <Text fontSize={"xs"}>
-              <Moment format="DD/MM/YYYY">{customer?.createdAt}</Moment>
-            </Text>
-          </HStack>
-          <HStack alignItems={"end"}>
-            <Text fontSize={"xs"}>Cập nhật lần cuối: </Text>
-            <Text fontSize={"xs"}>
-              <Moment format="DD/MM/YYYY">{customer?.updatedAt}</Moment>
+              <Moment format="DD/MM/YYYY">{requestuserinfos?.createdAt}</Moment>
             </Text>
           </HStack>
         </Stack>

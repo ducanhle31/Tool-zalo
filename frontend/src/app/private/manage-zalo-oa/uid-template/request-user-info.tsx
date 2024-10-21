@@ -137,12 +137,16 @@ export default function RequestUserInfo() {
 
       {!isLoading && (
         <SimpleGrid
-          columns={{ base: 1, sm: 2, md: 4, lg: 4, xl: 4, "2xl": 4 }}
-          gap={"18px"}
-          color={"gray.400"}
+          columns={{ base: 1, sm: 2, md: 3, lg: 4 }} 
+          spacing="24px" 
+          mt={"32px"}
+          mb={"48px"}
         >
-          {customersPag?.map((customer, index) => (
-            <RequestUseInfoDetail customer={customer} key={index} />
+          {customersPag?.map((requestuserinfos, index) => (
+            <RequestUseInfoDetail
+              requestuserinfos={requestuserinfos}
+              key={index}
+            />
           ))}
         </SimpleGrid>
       )}
