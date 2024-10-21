@@ -205,7 +205,7 @@ export const RequestUserInfoForm = ({
             backgroundColor="whiteAlpha.900"
           >
             <FormControl>
-              <FormLabel>Tên nhóm</FormLabel>
+              <FormLabel>Tên mẫu</FormLabel>
               <InputGroup flexDir={"column"}>
                 <InputLeftElement
                   pointerEvents="none"
@@ -213,18 +213,27 @@ export const RequestUserInfoForm = ({
                 />
                 <Input
                   rounded={"sm"}
-                  {...register("title", { required: true })}
+                  {...register("title", {
+                    required: true,
+                    maxLength: 100,
+                  })}
                   type="text"
+                  placeholder="Nhập tên mẫu"
                 />
-                {errors.title && (
+                {errors.title && errors.title.type === "required" && (
                   <FormHelperText color="red.300">
-                    Tên nhóm là bắt buộc
+                    Tên mẫu là bắt buộc
+                  </FormHelperText>
+                )}
+                {errors.title && errors.title.type === "maxLength" && (
+                  <FormHelperText color="red.300">
+                    Tên mẫu không được vượt quá 100 ký tự
                   </FormHelperText>
                 )}
               </InputGroup>
             </FormControl>
             <FormControl>
-              <FormLabel>Đường dẫn</FormLabel>
+              <FormLabel>Đường dẫn ảnh</FormLabel>
               <InputGroup flexDir={"column"}>
                 <InputLeftElement
                   pointerEvents="none"
@@ -238,14 +247,14 @@ export const RequestUserInfoForm = ({
                 />
                 {errors.image_url && (
                   <FormHelperText color="red.300">
-                    Đường dẫn là bắt buộc
+                    Đường dẫn ảnh là bắt buộc
                   </FormHelperText>
                 )}
               </InputGroup>
             </FormControl>
           </SimpleGrid>
           <FormControl>
-            <FormLabel>Mô tả nhóm</FormLabel>
+            <FormLabel>Tiêu đề phụ</FormLabel>
             <InputGroup flexDir={"column"}>
               <InputLeftElement
                 pointerEvents="none"
@@ -255,12 +264,20 @@ export const RequestUserInfoForm = ({
               <Input
                 as={Textarea}
                 rounded={"sm"}
-                {...register("subtitle", { required: true })}
-                placeholder="Nhập mô tả của nhóm"
+                {...register("subtitle", {
+                  required: true,
+                  maxLength: 500,
+                })}
+                placeholder="Nhập tiêu đề phụ"
               />
-              {errors.subtitle && (
+              {errors.subtitle && errors.subtitle.type === "required" && (
                 <FormHelperText color="red.300">
-                  Mô tả là bắt buộc
+                  Tiêu đề phụ là bắt buộc
+                </FormHelperText>
+              )}
+              {errors.subtitle && errors.subtitle.type === "maxLength" && (
+                <FormHelperText color="red.300">
+                  Tiêu đề phụ không được vượt quá 500 ký tự
                 </FormHelperText>
               )}
             </InputGroup>
